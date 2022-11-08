@@ -11,7 +11,6 @@
     "sourceMap": false,
     "outDir": "./dist",
     "rootDir": "./lib",
-    "incremental": true,
     "skipLibCheck": true
   },
   "include": [
