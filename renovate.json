@@ -1,9 +1,23 @@
 {
-  "packageRules": [{
-    "depTypeList": ["devDependencies"],
-    "automerge": true
-  }],
+  "timezone": "Asia/Seoul",
+  "schedule": [
+    "every weekend"
+  ],
+  "packageRules": [
+    {
+      "depTypeList": ["devDependencies"],
+      "automerge": true
+    },
+    {
+      "groupName": "lints",
+      "matchPackagePatterns": ["^eslint", "^prettier"],
+      "labels": ["lint"]
+    }
+  ],
   "extends": [
     "config:base"
+  ],
+  "ignoreDeps": [
+    "nanoid"
   ]
 }
