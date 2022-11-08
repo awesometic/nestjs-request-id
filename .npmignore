@@ -1,0 +1,16 @@
+# source
+lib
+tests
+index.ts
+package-lock.json
+tsconfig.json
+tsconfig.tsbuildinfo
+.prettierrc
+
+# github
+renovate.json
+
+# misc
+.eslintrc.js
+.husky
+.vscode
