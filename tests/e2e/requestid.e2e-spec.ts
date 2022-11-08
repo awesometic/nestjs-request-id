@@ -6,6 +6,7 @@ import * as request from 'supertest';
 import { RequestIdFormatType } from '../../lib';
 import {
   ApplicationModuleDefault,
+  ApplicationModuleWithRandom,
   ApplicationModuleWithUUIDV1,
   ApplicationModuleWithUUIDV4,
 } from '../src';
@@ -40,6 +41,39 @@ describe('Request ID', () => {
       expect(response.statusCode).toBe(200);
       expect(response.text).toBeDefined();
       expect(uuid.validate(response.text)).toBe(true);
+    });
+
+    afterEach(async () => {
+      await app.close();
+    });
+  });
+
+  describe('Random', () => {
+    beforeEach(async () => {
+      const moduleFixture = await Test.createTestingModule({
+        imports: [ApplicationModuleWithRandom],
+      }).compile();
+
+      app = moduleFixture.createNestApplication();
+      server = app.getHttpServer();
+
+      await app.init();
+    });
+
+    it('should return current request ID format type', async () => {
+      const response = await request(server).get('/what-is-my-request-id-type');
+
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toBeDefined();
+      expect(response.text).toBe(RequestIdFormatType.RANDOM);
+    });
+
+    it('should return current request ID', async () => {
+      const response = await request(server).get('/what-is-my-request-id');
+
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toBeDefined();
+      expect(response.text.length).toBe(21);
     });
 
     afterEach(async () => {
