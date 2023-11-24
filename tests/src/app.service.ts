@@ -12,6 +12,10 @@ export class ApplicationService {
     return this.requestIdService.requestIdType;
   }
 
+  public getRequestIdLength() {
+    return this.requestIdService.requestIdLength;
+  }
+
   public getRequestId() {
     return this.requestIdService.requestId;
   }

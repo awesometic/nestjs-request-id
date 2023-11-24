@@ -7,9 +7,11 @@ import { RequestIdFormatType } from '../../lib';
 import {
   ApplicationModuleDefault,
   ApplicationModuleWithRandom,
+  ApplicationModuleWithRandomLength,
   ApplicationModuleWithUUIDV1,
   ApplicationModuleWithUUIDV4,
 } from '../src';
+import { RANDOM_EDITED_LENGTH } from '../config/test.config';
 
 describe('Request ID', () => {
   let app: INestApplication;
@@ -60,6 +62,16 @@ describe('Request ID', () => {
       await app.init();
     });
 
+    it('should return default length number', async () => {
+      const response = await request(server).get(
+        '/what-is-my-request-id-length',
+      );
+
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toBeDefined();
+      expect(response.text).toBe(String(21));
+    });
+
     it('should return current request ID format type', async () => {
       const response = await request(server).get('/what-is-my-request-id-type');
 
@@ -74,6 +86,49 @@ describe('Request ID', () => {
       expect(response.statusCode).toBe(200);
       expect(response.text).toBeDefined();
       expect(response.text.length).toBe(21);
+    });
+
+    afterEach(async () => {
+      await app.close();
+    });
+  });
+
+  describe('Random - length', () => {
+    beforeEach(async () => {
+      const moduleFixture = await Test.createTestingModule({
+        imports: [ApplicationModuleWithRandomLength],
+      }).compile();
+
+      app = moduleFixture.createNestApplication();
+      server = app.getHttpServer();
+
+      await app.init();
+    });
+
+    it('should return passed length number', async () => {
+      const response = await request(server).get(
+        '/what-is-my-request-id-length',
+      );
+
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toBeDefined();
+      expect(response.text).toBe(String(RANDOM_EDITED_LENGTH));
+    });
+
+    it('should return current request ID format type', async () => {
+      const response = await request(server).get('/what-is-my-request-id-type');
+
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toBeDefined();
+      expect(response.text).toBe(RequestIdFormatType.RANDOM);
+    });
+
+    it('should return current request ID', async () => {
+      const response = await request(server).get('/what-is-my-request-id');
+
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toBeDefined();
+      expect(response.text.length).toBe(RANDOM_EDITED_LENGTH);
     });
 
     afterEach(async () => {

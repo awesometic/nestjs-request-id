@@ -11,6 +11,12 @@ export class ApplicationController {
     return this.appService.getRequestIdType();
   }
 
+  @Get('/what-is-my-request-id-length')
+  @HttpCode(200)
+  public whatIsMyRequestIdLength() {
+    return this.appService.getRequestIdLength();
+  }
+
   @Get('/what-is-my-request-id')
   @HttpCode(200)
   public whatIsMyRequestId() {
