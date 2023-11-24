@@ -9,11 +9,18 @@ import {
 import { RequestIdMiddleware } from './requestid.middleware';
 import { RequestIdService } from './requestid.service';
 import { RequestIdModuleOptions } from './requestid.interface';
+import { RequestIdFormatType } from './requestid.enum';
 
 const requestIdServiceProvider = {
   provide: REQUEST_ID_TOKEN,
   useFactory: (options: RequestIdModuleOptions, request: Request) =>
-    new RequestIdService(options, request),
+    new RequestIdService(
+      {
+        // Set default values for the options if they are not provided
+        type: options?.type ?? RequestIdFormatType.UUID_V4,
+      },
+      request,
+    ),
   inject: [MODULE_OPTIONS_TOKEN, REQUEST],
   scope: Scope.REQUEST,
 };

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { RequestIdFormatType } from './requestid.enum';
 import { REQUEST_ID_HEADER } from './requestid.constants';
 import { RequestIdModuleOptions } from './requestid.interface';
 
@@ -12,8 +11,7 @@ export class RequestIdService {
   ) {}
 
   get requestIdType() {
-    // By default, it will use UUID v4 method to generate request IDs
-    return this.options.type ?? RequestIdFormatType.UUID_V4;
+    return this.options.type;
   }
 
   get requestId() {

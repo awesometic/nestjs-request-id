@@ -24,6 +24,11 @@ export class RequestIdMiddleware implements NestMiddleware {
       case RequestIdFormatType.UUID_V4:
         req.headers[REQUEST_ID_HEADER] = uuid.v4();
         break;
+      default:
+        // Throw an error if the given format type is not supported
+        throw new Error(
+          `Unsupported request ID format type: ${this.requestIdService.requestIdType}`,
+        );
     }
 
     next();
