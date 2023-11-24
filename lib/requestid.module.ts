@@ -18,6 +18,7 @@ const requestIdServiceProvider = {
       {
         // Set default values for the options if they are not provided
         type: options?.type ?? RequestIdFormatType.UUID_V4,
+        length: options?.length ?? 21, // Default size for nanoid,
       },
       request,
     ),

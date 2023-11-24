@@ -14,9 +14,11 @@ export class RequestIdMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, _: Response, next: NextFunction) {
+    const givenLength = this.requestIdService.requestIdLength;
+
     switch (this.requestIdService.requestIdType) {
       case RequestIdFormatType.RANDOM:
-        req.headers[REQUEST_ID_HEADER] = await nanoid();
+        req.headers[REQUEST_ID_HEADER] = await nanoid(givenLength);
         break;
       case RequestIdFormatType.UUID_V1:
         req.headers[REQUEST_ID_HEADER] = uuid.v1();

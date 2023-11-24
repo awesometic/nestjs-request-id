@@ -14,6 +14,10 @@ export class RequestIdService {
     return this.options.type;
   }
 
+  get requestIdLength() {
+    return this.options.length;
+  }
+
   get requestId() {
     return this.request.headers[REQUEST_ID_HEADER];
   }
