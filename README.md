@@ -38,6 +38,7 @@ For an option, you can choose one of the followings. These options are defined a
   imports: [
     RequestIdModule.register({
       type: RequestIdFormatType.RANDOM,
+      length: 10, // Length affects on RANDOM format type only
     }),
   ],
   ...
@@ -63,6 +64,9 @@ And you can see the type and its unique ID using the following usage.
 ```typescript
 // To get the current format type
 this.requestIdService.requestIdType;
+
+// TO get the length of the request ID in RANDOM format type
+this.requestIdService.requestIdLength;
 
 // To get its request ID
 this.requestIdService.requestId;
