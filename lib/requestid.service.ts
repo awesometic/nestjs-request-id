@@ -1,24 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { Request } from 'express';
-import { REQUEST_ID_HEADER } from './requestid.constants';
-import { RequestIdModuleOptions } from './requestid.interface';
+import { ClsService } from 'nestjs-cls';
+import {
+  RequestIdModuleOptions,
+  RequestIdDataStore,
+} from './requestid.interface';
 
 @Injectable()
 export class RequestIdService {
-  constructor(
-    private readonly options: RequestIdModuleOptions,
-    private readonly request: Request,
-  ) {}
-
-  get requestIdType() {
-    return this.options.type;
-  }
-
-  get requestIdLength() {
-    return this.options.length;
+  constructor(private readonly clsService: ClsService<RequestIdDataStore>) {
+    this.clsService.enter();
   }
 
   get requestId() {
-    return this.request.headers[REQUEST_ID_HEADER];
+    return this.clsService.get().requestId;
+  }
+
+  set requestId(value: string) {
+    this.clsService.set('requestId', value);
+  }
+
+  get requestIdType() {
+    return this.clsService.get().type;
+  }
+
+  set requestIdType(value: RequestIdModuleOptions['type']) {
+    this.clsService.set('type', value);
+  }
+
+  get requestIdLength() {
+    return this.clsService.get().length;
+  }
+
+  set requestIdLength(value: RequestIdModuleOptions['length']) {
+    this.clsService.set('length', value);
   }
 }
