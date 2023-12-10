@@ -17,7 +17,7 @@ export class RequestIdMiddleware implements NestMiddleware {
     private readonly requestIdService: RequestIdService,
   ) {}
 
-  async use(req: Request, _: Response, next: NextFunction) {
+  async use(req: Request, res: Response, next: NextFunction) {
     // Get the options for this package by user
     // If the user does not provide the options, use the default options
     const { type, length } = {
@@ -26,20 +26,25 @@ export class RequestIdMiddleware implements NestMiddleware {
     };
 
     // Set the generated request ID to the request header
+    let requestId: string;
+
     switch (type) {
       case RequestIdFormatType.RANDOM:
-        req.headers[REQUEST_ID_HEADER] = await nanoid(length);
+        requestId = await nanoid(length);
         break;
       case RequestIdFormatType.UUID_V1:
-        req.headers[REQUEST_ID_HEADER] = uuid.v1();
+        requestId = uuid.v1();
         break;
       case RequestIdFormatType.UUID_V4:
-        req.headers[REQUEST_ID_HEADER] = uuid.v4();
+        requestId = uuid.v4();
         break;
       default:
         // Throw an error if the given format type is not supported
         throw new Error(`Unsupported request ID format type: ${type}`);
     }
+
+    req.headers[REQUEST_ID_HEADER] = requestId;
+    res.setHeader(REQUEST_ID_HEADER, requestId);
 
     // Set the request ID to the CLS service
     this.requestIdService.requestId = req.headers[REQUEST_ID_HEADER];
