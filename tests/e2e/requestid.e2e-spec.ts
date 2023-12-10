@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as uuid from 'uuid';
 import * as request from 'supertest';
-import { RequestIdFormatType } from '../../lib';
+import { REQUEST_ID_HEADER, RequestIdFormatType } from '../../lib';
 import {
   ApplicationModuleDefault,
   ApplicationModuleWithRandom,
@@ -44,6 +44,37 @@ describe('Request ID', () => {
       expect(requestId1).toBeDefined();
       expect(requestId2).toBeDefined();
       expect(requestId1).not.toBe(requestId2);
+    });
+
+    afterEach(async () => {
+      await app.close();
+    });
+  });
+
+  describe('Response Header - X-Request-Id', () => {
+    let app: INestApplication;
+    let server: Server;
+
+    beforeEach(async () => {
+      const moduleFixture = await Test.createTestingModule({
+        imports: [ApplicationModuleDefault],
+      }).compile();
+
+      app = moduleFixture.createNestApplication();
+      server = app.getHttpServer();
+
+      await app.init();
+    });
+
+    it('should return a response with X-Request-Id header', async () => {
+      const response = await request(server).get('/what-is-my-request-id');
+
+      // Header is case insensitive, so we need to convert the constant to lowercase
+      const headerNameInLowerCase = REQUEST_ID_HEADER.toLowerCase();
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers[headerNameInLowerCase]).toBeDefined();
+      expect(response.headers[headerNameInLowerCase]).toBe(response.text);
     });
 
     afterEach(async () => {
