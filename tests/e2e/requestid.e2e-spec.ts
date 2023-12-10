@@ -17,6 +17,40 @@ describe('Request ID', () => {
   let app: INestApplication;
   let server: Server;
 
+  describe('Multiple Requests - Different Request ID', () => {
+    let requestId1: string;
+    let requestId2: string;
+
+    beforeEach(async () => {
+      const moduleFixture = await Test.createTestingModule({
+        imports: [ApplicationModuleDefault],
+      }).compile();
+
+      app = moduleFixture.createNestApplication();
+      server = app.getHttpServer();
+
+      await app.init();
+    });
+
+    it('should return different request IDs for multiple requests', async () => {
+      const response1 = await request(server).get('/what-is-my-request-id');
+      requestId1 = response1.text;
+
+      const response2 = await request(server).get('/what-is-my-request-id');
+      requestId2 = response2.text;
+
+      expect(response1.statusCode).toBe(200);
+      expect(response2.statusCode).toBe(200);
+      expect(requestId1).toBeDefined();
+      expect(requestId2).toBeDefined();
+      expect(requestId1).not.toBe(requestId2);
+    });
+
+    afterEach(async () => {
+      await app.close();
+    });
+  });
+
   describe('Default - UUID v4', () => {
     beforeEach(async () => {
       const moduleFixture = await Test.createTestingModule({
