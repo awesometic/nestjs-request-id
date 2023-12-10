@@ -2,11 +2,13 @@
 
 A simple module to track the request flows in the application.
 
-It adds `X-Request-Id` to the request header and provides the injectable service to see that unique ID everywhere.
+It adds `X-Request-Id` to the request/response header and provides the injectable service to see that unique ID everywhere.
 
 Without this kind of method, for logging the request flows you should have passed the request object everywhere you want to log about.
 
 Now, it just can be done by importing this module in the root application module, and injecting its service anywhere you want to see the unique request ID.
+
+All of these could be done by `nestjs-cls`.
 
 ## Requires
 
@@ -65,7 +67,7 @@ And you can see the type and its unique ID using the following usage.
 // To get the current format type
 this.requestIdService.requestIdType;
 
-// TO get the length of the request ID in RANDOM format type
+// To get the length of the request ID in RANDOM format type
 this.requestIdService.requestIdLength;
 
 // To get its request ID
