@@ -35,7 +35,7 @@
     "nestjs-cls": "^3.6.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.5",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@nestjs/testing": "^9.0.0",
