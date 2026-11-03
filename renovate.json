@@ -1,23 +1,4 @@
 {
-  "timezone": "Asia/Seoul",
-  "schedule": [
-    "every weekend"
-  ],
-  "packageRules": [
-    {
-      "depTypeList": ["devDependencies"],
-      "automerge": true
-    },
-    {
-      "groupName": "lints",
-      "matchPackagePatterns": ["^eslint", "^prettier"],
-      "labels": ["lint"]
-    }
-  ],
-  "extends": [
-    "config:base"
-  ],
-  "ignoreDeps": [
-    "nanoid"
-  ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabled": false
 }
